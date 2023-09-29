@@ -1,95 +1,60 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import styles from "./page.module.css";
+import { useState } from "react";
+
+function calc(probability: number, nperhour: number) {
+  var overallProb = 1.0 - (1.0 - probability) ** nperhour;
+  var i = 1;
+  while (overallProb < 0.99) {
+    nperhour += nperhour;
+    i += 1;
+    overallProb = 1 - (1 - probability) ** nperhour;
+  }
+  return [i, overallProb];
+}
 
 export default function Home() {
+  const [result, setResult] = useState([0, 0] as [number, number] | null);
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    var result = calc(eval(event.target[0].value), parseFloat(event.target[1].value));
+    console.log(result);
+    setResult([result[0], result[1]]);
+  };
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
+    <div className={styles.main}>
+      <h1>Melvor Idle Drop Chance Calculator</h1>
+      <form onSubmit={handleSubmit}>
         <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
+          <label className={styles.label}>Probability</label>
+          <input
+            type="probability"
+            placeholder="1/P"
+            id="username"
+            className={styles.input}></input>
         </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+        <p>
+          <label className={styles.label}>Action per hour</label>
+          <input
+            type="actionperhour"
+            placeholder="X"
+            id="password"
+            className={styles.input}></input>
+        </p>
+        <button
+          type="submit"
+          className={styles.button}>
+          <p className={styles.buttonText}>Submit</p>
+        </button>
+      </form>
+      {result && (
+        <p className={styles.result}>
+          You will have a {result[1]}% chance of getting the item after{" "}
+          {result[0]} hours.
+        </p>
+      )}
+    </div>
+  );
 }
