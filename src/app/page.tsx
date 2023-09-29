@@ -2,6 +2,7 @@
 
 import styles from "./page.module.css";
 import { useState } from "react";
+import Image from "next/image";
 
 function calc(probability: number, nperhour: number) {
   var overallProb = 1.0 - (1.0 - probability) ** nperhour;
@@ -19,42 +20,55 @@ export default function Home() {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    var result = calc(eval(event.target[0].value), parseFloat(event.target[1].value));
+    var result = calc(
+      eval(event.target[0].value),
+      parseFloat(event.target[1].value)
+    );
     console.log(result);
     setResult([result[0], result[1]]);
   };
   return (
-    <div className={styles.main}>
-      <h1>Melvor Idle Drop Chance Calculator</h1>
-      <form onSubmit={handleSubmit}>
-        <p>
-          <label className={styles.label}>Probability</label>
-          <input
-            type="probability"
-            placeholder="1/P"
-            id="username"
-            className={styles.input}></input>
-        </p>
-        <p>
-          <label className={styles.label}>Action per hour</label>
-          <input
-            type="actionperhour"
-            placeholder="X"
-            id="password"
-            className={styles.input}></input>
-        </p>
-        <button
-          type="submit"
-          className={styles.button}>
-          <p className={styles.buttonText}>Submit</p>
-        </button>
-      </form>
-      {result && (
-        <p className={styles.result}>
-          You will have a {(result[1] * 100).toFixed(2)}% chance of getting the item after{" "}
-          {result[0]} hours.
-        </p>
-      )}
-    </div>
+    <>
+      <div className={styles.main}>
+        <h1>Melvor Idle Drop Chance Calculator</h1>
+        <form onSubmit={handleSubmit}>
+          <p>
+            <label className={styles.label}>Probability</label>
+            <input
+              type="probability"
+              placeholder="1/P"
+              id="username"
+              className={styles.input}></input>
+          </p>
+          <p>
+            <label className={styles.label}>Action per hour</label>
+            <input
+              type="actionperhour"
+              placeholder="X"
+              id="password"
+              className={styles.input}></input>
+          </p>
+          <button
+            type="submit"
+            className={styles.button}>
+            <p className={styles.buttonText}>Submit</p>
+          </button>
+        </form>
+        {result && (
+          <p className={styles.result}>
+            You will have a {(result[1] * 100).toFixed(2)}% chance of getting
+            the item after {result[0]} hours.
+          </p>
+        )}
+      </div>
+      <Image
+        className={styles.github}
+        src="/github-mark.png"
+        alt={""}
+        width="64"
+        height="64"
+        onClick={() => window.open("https://github.com/trkviktor/probabilitycalc/tree/master", "_blank")}
+        ></Image>
+    </>
   );
 }

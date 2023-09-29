@@ -44,3 +44,10 @@
   font-weight: 600;
 }
 
+.github{
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  cursor: pointer;
+}
+
