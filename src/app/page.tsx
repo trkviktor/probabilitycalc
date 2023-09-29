@@ -51,7 +51,7 @@ export default function Home() {
       </form>
       {result && (
         <p className={styles.result}>
-          You will have a {result[1]}% chance of getting the item after{" "}
+          You will have a {(result[1] * 100).toFixed(2)}% chance of getting the item after{" "}
           {result[0]} hours.
         </p>
       )}
